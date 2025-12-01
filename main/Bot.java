@@ -11,12 +11,12 @@ public class Bot{
         while (true){
             String answer=console.data_input();
             if (!is_playing){
-                if (Logic_bot.logic_start_game(answer)){//проверить на начинать ли игру
+                if (LogicBot.logic_start_game(answer)){//проверить на начинать ли игру
                     is_playing=true;
                     console.data_out(game.game_start());
                 }
                 else {
-                console.data_out(Logic_bot.logic_work(answer));//обработка отальных вариантов ответа
+                console.data_out(LogicBot.logic_work(answer));//обработка отальных вариантов ответа
                 }
             }
             else{
@@ -28,4 +28,5 @@ public class Bot{
         }
     }
 }
+
 
