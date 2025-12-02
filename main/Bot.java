@@ -5,15 +5,20 @@ public class Bot{
         isPlaying=false;
     }
     public void botStart(){
+
         Console console=new Console();
         Game game=new Game();
         LogicBot logicBot=new LogicBot();
-        console.dataOut("Привет! Давай играть.");
+
+        PhraseProvider provider = new PhraseProvider();
+        String greeting = provider.getRandomGreeting();
+        console.dataOut(greeting);
+
         while (true){
             String answer=console.dataInput();
             if (!isPlaying){
                 if (logicBot.canStartGame(answer)){//проверить на начинать ли игру
-                    console.dataOut("Какое слово ты хочешь отгадывать? Из 7,6 или 5 букв? ответь цифрой");//выбор уровня сложности
+                    console.dataOut("Какое слово ты хочешь отгадывать? Из 5, 6, или 7 букв? ответь цифрой");//выбор уровня сложности
                     while (game.level()==0)
                         console.dataOut(game.setDifficult(console.dataInput()));
                     console.dataOut(game.gameStart());
