@@ -1,12 +1,17 @@
 public class LogicBot {
     public boolean canStartGame (String answer){
-        return (answer.contains("игра"));
+        return (answer.contains("/play"));
     }
     public String handleUserAnswer(String answer){
         StringBuilder result=new StringBuilder();
         switch (answer){
             case "/help":
-                result.append("Компьютер загадывает слово \n Вы вводите слова и видите буквы на своих местахи и те которые есть в слове \n для начала игры введите \"игра\" \n для выхода из игры введите \"/end game\"");
+
+                result.append("УГАДАЙ СЛОВО\n");
+                result.append("1. Слово представлено как `_____`\n2. Вводи слова этой же длины\n3. Если буква на месте - она появится в слове\n4. Если буква есть, но не на своём месте - это будет указано рядом\n");
+                result.append("КОМАНДЫ:\n/play - начать\n/endgame - завершить\n/help - справка\n");
+                result.append("Отгадай слово полностью!");
+
                 break;
             default:
                 result.append("неизвестная команда");
