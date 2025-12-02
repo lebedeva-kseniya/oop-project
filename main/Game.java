@@ -15,6 +15,8 @@ public class Game {
         length=0;
         word=null;
     }
+
+
     public int level(){return length;}
     public boolean isGameEnd(){
         return gameEnd;
@@ -29,7 +31,7 @@ public class Game {
             length=6;
         else if (answer.equals("7"))
             length=7;
-        else return "Введите коректную длину слова";
+        else return "Введите корректную длину слова";
         return "Сложность выбрана";
     }
     public String gameStart(){
@@ -56,10 +58,11 @@ public class Game {
         return "Игра началась!";
     }
     public String gamePlay(String answer){
-        if (answer.contains("/end game")){
+        if (answer.contains("/endgame")){
             String Word=word;
             gameEnd();
-            return "Игра окончена, слово не отгадано \nЗагадано было: "+Word;
+            PhraseProvider provider = new PhraseProvider();
+            return provider.getRandomEnding()+"загадагл было: "+Word;
         }
         String normalAnswer=normalised(answer);
         if (normalAnswer.length() != length || !normalAnswer.matches("[А-ЯЁ]+")) {
@@ -69,7 +72,9 @@ public class Game {
         if (normalAnswer.equals(word)){
             String Word=word;
             gameEnd();
-            return ("Побеба! Отгадано с " + countAnswer + " попытки. Загаданное слово: " + Word);
+            PhraseProvider provider = new PhraseProvider();
+            return provider.getRandomWinPhrase(Word, countAnswer);
+
         }
         StringBuilder result = new StringBuilder();
         StringBuilder usedSymbols = new StringBuilder();
@@ -83,6 +88,9 @@ public class Game {
                 result.append("_");
             }
         }
-        return  (countAnswer + " Результат: " + result + " И есть буквы " +usedSymbols);
+
+        PhraseProvider provider = new PhraseProvider();
+        return provider.getAttemptPhrase(countAnswer, result, usedSymbols);
+
     }
 }
