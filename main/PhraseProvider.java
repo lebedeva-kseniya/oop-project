@@ -1,5 +1,3 @@
-package main;
-
 import java.util.List;
 import java.util.Random;
 
@@ -81,5 +79,6 @@ public class PhraseProvider {
     public String getRandomEnding() {
         return endGamePhrases.get(random.nextInt(endGamePhrases.size()));
     }
+
 
 }
