@@ -1,28 +1,39 @@
+package test;
+
+import main.LogicBot;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LogicBotTest {
 
     @Test
-    public void testLogicStartGameWithGameWord() {
-        assertTrue(LogicBot.logic_start_game("игра"));
+    public void testCanStartGame() {
+        LogicBot logicBot = new LogicBot();
+
+        assertTrue(logicBot.canStartGame("/play"));
+        assertTrue(logicBot.canStartGame("текст /play текст"));
+        assertFalse(logicBot.canStartGame("/help"));
+        assertFalse(logicBot.canStartGame("просто текст"));
     }
 
     @Test
-    public void testLogicStartGameWithHowToPlay() {
-        assertFalse(LogicBot.logic_start_game("как играть"));
+    public void testHandleUserAnswerHelp() {
+        LogicBot logicBot = new LogicBot();
+        String result = logicBot.handleUserAnswer("/help");
+
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+        assertTrue(result.contains("УГАДАЙ СЛОВО"));
+        assertTrue(result.contains("/play"));
+        assertTrue(result.contains("/endgame"));
+        assertTrue(result.contains("/help"));
     }
 
     @Test
-    public void testLogicWorkWithRules() {
-        String result = LogicBot.logic_work("правила");
-        assertTrue(result.contains("Компьютер загадывает слово"));
-    }
+    public void testHandleUnknownCommand() {
+        LogicBot logicBot = new LogicBot();
+        String result = logicBot.handleUserAnswer("неизвестная команда");
 
-    @Test
-    public void testLogicWorkWithUnknownCommand() {
-        String result = LogicBot.logic_work("неизвестная команда");
         assertEquals("неизвестная команда", result);
     }
-
 }
