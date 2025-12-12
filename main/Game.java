@@ -39,21 +39,12 @@ public class Game {
         gameEnd=false;
         if (length==5)
             word=storage.getWord5();//выбор слова из хранилища
-        else if (length==6){
-            word=storage.getWord6();
-            if (word==null){
-                length=0;
-                gameEnd=true;
-                return "Слово не может быть загружено, попробуйте снова";
-            }
-        }
-        else {
-            word=storage.getWord7();
-            if (word==null){
-                length=0;
-                gameEnd=true;
-                return "Слово не может быть загружено, попробуйте снова";
-            }
+        else
+            word=storage.getWordFromWeb(length);
+        if (word==null){
+            length=0;
+            gameEnd=true;
+            return "Слово не может быть загружено, попробуйте снова";
         }
         return "Игра началась!";
     }
@@ -94,3 +85,4 @@ public class Game {
 
     }
 }
+
