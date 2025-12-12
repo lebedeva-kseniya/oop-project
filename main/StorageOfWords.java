@@ -1,3 +1,5 @@
+package main;
+
 public class StorageOfWords {
     public static final String[] WORDS = {
             "КНИГА", "РЕЧКА", "СОКОЛ", "СТОЛБ",
@@ -6,5 +8,6 @@ public class StorageOfWords {
     };
     public static final int countWords= WORDS.length;
 }
+
 
 
