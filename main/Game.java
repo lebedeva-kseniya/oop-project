@@ -1,45 +1,88 @@
 public class Game {
-    private boolean game_end;
-    private int count_answer;
+    private boolean gameEnd;
+    private int countAnswer;
     private String word;
+    private int length;
+    private Storage storage;
     public Game(){
-        count_answer=0;
-        game_end=false;
+        countAnswer=0;
+        gameEnd=false;
+        length=0;
+        storage=new Storage();
+    }
+    private void gameEnd(){
+        gameEnd=true;
+        length=0;
+        word=null;
+    }
+
+
+    public int level(){return length;}
+    public boolean isGameEnd(){
+        return gameEnd;
     }
     private String normalised(String answer){
         return answer.toUpperCase();
     }
-    public String game_start(){
-        word=Storage.get_word();//выбор слова из хранилища
-        count_answer=0;
-        game_end=false;
+    public String setDifficult(String answer){
+        if (answer.equals("5"))
+            length=5;
+        else if (answer.equals("6"))
+            length=6;
+        else if (answer.equals("7"))
+            length=7;
+        else return "Введите корректную длину слова";
+        return "Сложность выбрана";
+    }
+    public String gameStart(){
+        countAnswer=0;
+        gameEnd=false;
+        if (length==5)
+            word=storage.getWord5();//выбор слова из хранилища
+        else
+            word=storage.getWordFromWeb(length);
+        if (word==null){
+            length=0;
+            gameEnd=true;
+            return "Слово не может быть загружено, попробуйте снова";
+        }
         return "Игра началась!";
     }
-    public String game_play(String answer){
-        String normal_answer=normalised(answer);
-        if (normal_answer.length() != 5 || !normal_answer.matches("[А-ЯЁ]+")) {
-            return "Ошибка! Введите слово из 5 русских букв.";
+    public String gamePlay(String answer){
+        if (answer.contains("/endgame")){
+            String Word=word;
+            gameEnd();
+            PhraseProvider provider = new PhraseProvider();
+            return provider.getRandomEnding()+"загадагл было: "+Word;
         }
-        count_answer++;
-        if (normal_answer.equals(word)){
-            game_end=true;
-            return ("Побеба! Отгадано с " + count_answer + " попытки. Загаданное слово: " + word);
+        String normalAnswer=normalised(answer);
+        if (normalAnswer.length() != length || !normalAnswer.matches("[А-ЯЁ]+")) {
+            return "Ошибка! Введите слово из "+ length + " русских букв.";
+        }
+        countAnswer++;
+        if (normalAnswer.equals(word)){
+            String Word=word;
+            gameEnd();
+            PhraseProvider provider = new PhraseProvider();
+            return provider.getRandomWinPhrase(Word, countAnswer);
+
         }
         StringBuilder result = new StringBuilder();
-        StringBuilder used_symbols = new StringBuilder();
-        for (int i = 0; i < 5; i++) {
-            if (normal_answer.charAt(i) == word.charAt(i)) {
-                result.append(normal_answer.charAt(i));
+        StringBuilder usedSymbols = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            if (normalAnswer.charAt(i) == word.charAt(i)) {
+                result.append(normalAnswer.charAt(i));
             } else {
-                if (word.indexOf(normal_answer.charAt(i))>=0){
-                    used_symbols.append(normal_answer.charAt(i));
+                if (word.indexOf(normalAnswer.charAt(i))>=0){
+                    usedSymbols.append(normalAnswer.charAt(i));
                 }
                 result.append("_");
             }
         }
-        return  (count_answer-1 + " Результат: " + result + " И есть буквы " +used_symbols);
-    }
-    public boolean is_game_end(){
-        return game_end;
+
+        PhraseProvider provider = new PhraseProvider();
+        return provider.getAttemptPhrase(countAnswer, result, usedSymbols);
+
     }
 }
+

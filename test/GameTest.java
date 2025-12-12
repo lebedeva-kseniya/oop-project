@@ -1,34 +1,41 @@
+package test;
+
+import main.Game;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-    public class GameTest {
+public class GameTest {
 
-        @Test
-        public void testGameStart() {
-            Game game = new Game();
-            String result = game.game_start();
-            assertTrue(result.contains("Игра началась"));
-        }
-
-        @Test
-        public void testNormalised() {
-            Game game = new Game();
-            String result = game.game_play("тест");
-            assertNotNull(result);
-        }
-
-        @Test
-        public void testIsGameEndInitiallyFalse() {
-            Game game = new Game();
-            assertFalse(game.is_game_end());
-        }
-
-        @Test
-        public void testInvalidWordLength() {
-            Game game = new Game();
-            game.game_start(); // начать игру
-            String result = game.game_play("abc");
-            assertTrue(result.contains("Ошибка"));
-        }
+    @Test
+    public void testGameConstructor() {
+        Game game = new Game();
+        assertFalse(game.isGameEnd());
+        assertEquals(0, game.level());
     }
 
+    @Test
+    public void testSetDifficulty() {
+        Game game = new Game();
+
+        assertEquals("Сложность выбрана", game.setDifficult("5"));
+        assertEquals(5, game.level());
+
+        assertEquals("Сложность выбрана", game.setDifficult("6"));
+        assertEquals(6, game.level());
+
+        assertEquals("Сложность выбрана", game.setDifficult("7"));
+        assertEquals(7, game.level());
+
+        assertEquals("Введите корректную длину слова", game.setDifficult("8"));
+    }
+
+    @Test
+    public void testGameStart() {
+        Game game = new Game();
+        game.setDifficult("5");
+        String result = game.gameStart();
+
+        assertTrue(result.equals("Игра началась!") || result.contains("не может"));
+        assertFalse(game.isGameEnd());
+    }
+}

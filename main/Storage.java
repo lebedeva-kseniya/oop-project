@@ -1,8 +1,26 @@
 import java.util.Random;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class Storage extends StorageOfWords{
-    public static String get_word(){
+    public String getWord5(){
         Random random=new Random();
-        return WORDS[random.nextInt(count_words)];
+        return WORDS[random.nextInt(countWords)];
+    }
+    public  String getWordFromWeb(int length){
+        String url;
+        if (length==6)
+            url="https://sanstv.ru/randomWord/lang-ru/strong-2/count-1/word-%3F%3F%3F%3F%3F%3F";
+        else
+            url="https://sanstv.ru/randomWord/lang-ru/strong-2/count-1/word-%3F%3F%3F%3F%3F%3F%3F";
+        Document doc;
+        try {
+            doc = Jsoup.connect(url).get();
+            int index=doc.toString().indexOf("target=\"_blank \"")+17;
+            return doc.toString().substring(index,index+length).toUpperCase();
+        } catch (Exception e){
+            return null;
+        }
     }
 }
+
