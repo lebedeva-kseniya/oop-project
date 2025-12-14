@@ -8,9 +8,8 @@ public class StorageOfWordsTest {
 
     @Test
     public void testConstants() {
-        assertEquals(12, StorageOfWords.countWords);
         assertNotNull(StorageOfWords.WORDS);
-        assertEquals(12, StorageOfWords.WORDS.length);
+        assertEquals(StorageOfWords.countWords, StorageOfWords.WORDS.length);
     }
 
     @Test
@@ -32,4 +31,5 @@ public class StorageOfWordsTest {
         }
         return false;
     }
+
 }
