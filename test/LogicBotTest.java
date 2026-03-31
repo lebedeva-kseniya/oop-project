@@ -7,30 +7,31 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LogicBotTest {
 
     @Test
-    public void testCanStartGame() {
+    void testCanStartGame() {
         LogicBot logicBot = new LogicBot();
 
         assertTrue(logicBot.canStartGame("/play"));
-        assertTrue(logicBot.canStartGame("текст /play текст"));
+        assertTrue(logicBot.canStartGame("начать /play сейчас"));
+        assertTrue(logicBot.canStartGame("давай /play игру"));
+
         assertFalse(logicBot.canStartGame("/help"));
+        assertFalse(logicBot.canStartGame("/hint"));
         assertFalse(logicBot.canStartGame("просто текст"));
     }
 
     @Test
-    public void testHandleUserAnswerHelp() {
+    void testHandleUserAnswerHelp() {
         LogicBot logicBot = new LogicBot();
         String result = logicBot.handleUserAnswer("/help");
 
-        assertNotNull(result);
-        assertFalse(result.isEmpty());
         assertTrue(result.contains("УГАДАЙ СЛОВО"));
+        assertTrue(result.contains("КОМАНДЫ:"));
         assertTrue(result.contains("/play"));
-        assertTrue(result.contains("/endgame"));
-        assertTrue(result.contains("/help"));
+        assertTrue(result.contains("/hint"));
     }
 
     @Test
-    public void testHandleUnknownCommand() {
+    void testHandleUserAnswerUnknown() {
         LogicBot logicBot = new LogicBot();
         String result = logicBot.handleUserAnswer("неизвестная команда");
 

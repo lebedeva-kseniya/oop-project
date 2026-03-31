@@ -1,3 +1,5 @@
+package main;
+
 import java.util.Random;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,4 +25,5 @@ public class Storage extends StorageOfWords{
         }
     }
 }
+
 

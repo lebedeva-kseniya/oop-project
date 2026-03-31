@@ -1,3 +1,5 @@
+package main;
+
 import java.util.Scanner;
 
 public class Console {
@@ -9,3 +11,4 @@ public class Console {
         return input.nextLine().trim();//считывание данных с консоли
     }
 }
+
