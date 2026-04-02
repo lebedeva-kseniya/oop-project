@@ -25,6 +25,9 @@ public class Bot{
             String answer=console.dataInput();
             if (!isPlaying){
                 if (logicBot.canStartGame(answer)){//проверить на начинать ли игру
+                    console.dataOut("как ты хочешь играть? 1 - классический режим, 0 - на время, 2 - на время со стандартными настройками");//выбор режима
+                    while (game.getMode()==3)
+                        console.dataOut(game.setModeGame(console.dataInput()));
                     console.dataOut("Какое слово ты хочешь отгадывать? Из 5, 6, или 7 букв? ответь цифрой");//выбор лины слова
                     while (game.levelWord()==0)
                         console.dataOut(game.setDifficultWord(console.dataInput()));
@@ -40,10 +43,16 @@ public class Bot{
                 }
             }
             else{
-                console.dataOut(game.gamePlay(answer));
+                console.dataOut(game.Play(answer));
                 if (game.isGameEnd()){
                     isPlaying=false;
-                    userStat.save();
+                    if (game.getMode()==3 || game.timeIsEnd())
+                        userStat.save();
+                    if (game.getMode()!=3){
+                        console.dataOut(game.gameStart());
+                        if (!game.isGameEnd())
+                            isPlaying=true;
+                    }
                 }
             }
         }
