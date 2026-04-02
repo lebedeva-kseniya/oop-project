@@ -1,0 +1,50 @@
+package test;
+
+import main.Game;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class GameTest {
+
+    @Test
+    void testGameCreation() {
+        Game game = new Game();
+        assertNotNull(game);
+        assertFalse(game.isGameEnd());
+    }
+
+    @Test
+    void testDifficultySelection() {
+        Game game = new Game();
+
+        assertEquals("Сложность выбрана", game.setDifficultWord("5"));
+        assertEquals("Сложность выбрана", game.setDifficultWord("6"));
+        assertEquals("Сложность выбрана", game.setDifficultWord("7"));
+        assertEquals("Введите корректную длину слова", game.setDifficultWord("4"));
+
+        assertEquals("Сложность выбрана", game.setDifficult("0"));
+        assertEquals("Сложность выбрана", game.setDifficult("1"));
+        assertEquals("Сложность выбрана", game.setDifficult("2"));
+        assertEquals("Введите корректный уровень сложности", game.setDifficult("3"));
+    }
+
+    @Test
+    void testGameStart() {
+        Game game = new Game();
+        game.setDifficultWord("5");
+
+        String result = game.gameStart();
+        assertTrue(result.contains("началась") || result.contains("загружено"));
+    }
+
+    @Test
+    void testEndGameCommand() {
+        Game game = new Game();
+        game.setDifficultWord("5");
+        game.gameStart();
+
+        String result = game.gamePlay("/endgame");
+        assertTrue(result.contains("/play"));
+        assertTrue(game.isGameEnd());
+    }
+}
