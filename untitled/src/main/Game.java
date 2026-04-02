@@ -1,5 +1,7 @@
 package main;
 
+import java.time.LocalTime;
+
 public class Game {
     private UserStat userStat;
     private boolean gameEnd;
@@ -11,6 +13,9 @@ public class Game {
     private boolean[] correctLetter = new boolean[7];
     private final Hint hint;
     private int countHint;
+    private int mode;//3 -none 1-classic 0 -timer
+    private LocalTime timeEnd;
+    private int countWinWords;
 
     public Game(UserStat userStat) {
         countAnswer = 0;
@@ -21,16 +26,20 @@ public class Game {
         countHint = 0;
         hint = new Hint();
         this.userStat = userStat;
+        mode=3;
     }
 
     private void gameEnd(boolean win) {
         userStat.finishGame(length, win, countAnswer);
         countAnswer = 0;
         gameEnd = true;
-        length = 0;
         word = null;
-        level = 0;
-        countHint = 0;
+        if (mode==1){
+            mode=3;
+            length = 0;
+            level = 0;
+            countHint = 0;
+        }
         for (int i = 0; i < 7; i++)
             correctLetter[i] = false;
     }
@@ -41,6 +50,10 @@ public class Game {
 
     public int level() {
         return level;
+    }
+
+    public boolean timeIsEnd(){
+        return (LocalTime.now().isAfter(timeEnd));
     }
 
     public boolean isGameEnd() {
@@ -62,7 +75,32 @@ public class Game {
         }
         return "Сложность выбрана";
     }
-
+    public int getMode(){return mode;}
+    public String setModeGame(String answer){
+        switch (answer) {
+            case "0": {
+                mode=0;
+                countWinWords=0;
+                break;
+            }
+            case "1": {
+                mode=1;
+                break;
+            }
+            case "2": {
+                mode=0;
+                length=5;
+                countHint=0;
+                level=5;
+                countWinWords=0;
+                break;
+            }
+            default: {
+                return "Введите корректный режим игры";
+            }
+        }
+        return "режим игры выбран";
+    }
     public String setDifficult(String answer) {
         switch (answer) {
             case "0": {
@@ -99,10 +137,19 @@ public class Game {
             gameEnd = true;
             return "Слово не может быть загружено, попробуйте снова";
         }
+        if (mode==0)
+            timeEnd=LocalTime.now().plusMinutes(5);
         return "Игра началась!";
     }
-
-    public String gamePlay(String answer) {
+    public String Play(String answer){
+        if (mode==1)
+            return gamePlay(answer);
+        else if (LocalTime.now().isBefore(timeEnd))
+            return gamePlay(answer);
+        mode=3;
+        return "время вышло отгадано: "+countWinWords+" слов";
+    }
+    private String gamePlay(String answer) {
         if (answer.contains("/hint")) {
             return gamePlayHint(answer);
         } else if (answer.contains("/endgame")) {
@@ -148,6 +195,7 @@ public class Game {
             String Word = word;
             int countA=countAnswer;
             gameEnd(true);
+            countWinWords++;
             PhraseProvider provider = new PhraseProvider();
             return provider.getRandomWinPhrase(Word, countA);
         }
