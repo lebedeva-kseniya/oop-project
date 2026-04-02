@@ -8,12 +8,18 @@ public class GameStat implements Serializable {
     private int countGame;
     private int countWinGame;
     private int record;
+    private String name;
     private static final long serialVersionUID = 1L;
 
-    public GameStat() {
+    public GameStat(String name)
+    {
         countGame = 0;
         countWinGame = 0;
         record = Integer.MAX_VALUE;
+        this.name=name;
+    }
+    public String getName(){
+        return name;
     }
 
     public int getCountGame() {
