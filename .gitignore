@@ -9,6 +9,9 @@ target/
 *.ipr
 out/
 
+# properties
+*.properties
+
 # Локальные файлы статистики (чтобы не пушить свой прогресс)
 stat.dat
 
